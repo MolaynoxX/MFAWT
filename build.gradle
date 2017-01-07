@@ -1,2 +1,16 @@
 apply plugin: 'idea'
 apply plugin: 'java'
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = 1.8
+
+group 'de.molaynoxx'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
