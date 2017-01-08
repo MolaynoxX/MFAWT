@@ -1,6 +1,6 @@
-package de.molaynoxx.mfawt.api.util;
+package de.molaynoxx.wtracker.api.util;
 
-import de.molaynoxx.mfawt.api.base.PerformedWorkout;
+import de.molaynoxx.wtracker.api.base.PerformedWorkout;
 
 import java.util.Comparator;
 

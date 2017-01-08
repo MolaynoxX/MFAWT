@@ -1,4 +1,4 @@
-package de.molaynoxx.mfawt.api.base;
+package de.molaynoxx.wtracker.api.base;
 
 import java.util.Date;
 

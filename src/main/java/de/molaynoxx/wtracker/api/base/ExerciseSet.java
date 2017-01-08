@@ -1,4 +1,4 @@
-package de.molaynoxx.mfawt.api.base;
+package de.molaynoxx.wtracker.api.base;
 
 import java.util.ArrayList;
 
@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class ExerciseSet {
 
+    private final ArrayList<Integer> repetitions = new ArrayList<>();
     private Exercise exercise;
-    private ArrayList<Integer> repetitions = new ArrayList<>();
     private double unitData;
 
     /**

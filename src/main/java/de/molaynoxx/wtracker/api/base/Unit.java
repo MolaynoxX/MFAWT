@@ -1,4 +1,4 @@
-package de.molaynoxx.mfawt.api.base;
+package de.molaynoxx.wtracker.api.base;
 
 /**
  * Class made to contain information about the unit of data from an exercise (i.e. 1km running)

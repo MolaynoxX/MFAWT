@@ -1,6 +1,6 @@
-package de.molaynoxx.mfawt.api.util;
+package de.molaynoxx.wtracker.api.util;
 
-import de.molaynoxx.mfawt.api.base.Unit;
+import de.molaynoxx.wtracker.api.base.Unit;
 
 /**
  * Helper class containing pre-defined units

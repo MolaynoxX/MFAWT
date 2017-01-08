@@ -1,8 +1,8 @@
-package de.molaynoxx.mfawt.tests.api.util;
+package de.molaynoxx.wtracker.tests.api.util;
 
-import de.molaynoxx.mfawt.api.base.PerformedWorkout;
-import de.molaynoxx.mfawt.api.base.Workout;
-import de.molaynoxx.mfawt.api.util.PerformedWorkoutDateComparator;
+import de.molaynoxx.wtracker.api.base.PerformedWorkout;
+import de.molaynoxx.wtracker.api.base.Workout;
+import de.molaynoxx.wtracker.api.util.PerformedWorkoutDateComparator;
 import org.junit.Test;
 
 import java.util.Comparator;
