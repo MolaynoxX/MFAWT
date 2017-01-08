@@ -4,6 +4,7 @@ import de.molaynoxx.wtracker.api.config.Config;
 import de.molaynoxx.wtracker.api.config.ConfigValue;
 import de.molaynoxx.wtracker.api.config.NumberConfigValue;
 import de.molaynoxx.wtracker.api.config.StringConfigValue;
+import de.molaynoxx.wtracker.api.exceptions.ConfigValueInvalidTypeException;
 import de.molaynoxx.wtracker.api.util.GsonUtil;
 import org.junit.Test;
 
@@ -18,8 +19,7 @@ public class ConfigTest {
 
     @Test
     public void testConfigSimple() throws IOException {
-        File cfgFile = new File("config.json");
-        Config cfg = new Config(cfgFile);
+        Config cfg = createDummyConfig();
 
         cfg.setConfiguration("Integer", 1);
         cfg.setConfiguration("Float", 1.5F);
@@ -32,7 +32,6 @@ public class ConfigTest {
         assertEquals(3.14D, cfg.getConfiguration("Double", Double.class), 0.01D);
         assertThat(cfg.getConfiguration("Byte", Byte.class), is((byte) 0xFF));
         assertThat(cfg.getConfiguration("RandomText", String.class), is("Hello World"));
-        cfgFile.delete();
     }
 
     @Test
@@ -88,6 +87,61 @@ public class ConfigTest {
         assertThat(cvInteger.getValue(), is(cvIntegerP.getValue()));
         assertThat(cvDouble.getValue(), is(cvDoubleP.getValue()));
         assertThat(cvLong.getValue(), is(cvLongP.getValue()));
+    }
+
+    private Config createDummyConfig() throws IOException {
+        File cfgFile = new File("config.json");
+        Config cfg = new Config(cfgFile);
+        cfgFile.delete();
+        return cfg;
+    }
+
+    @Test(expected = ConfigValueInvalidTypeException.class)
+    public void testConfigExceptionsGetNumberAsString() throws IOException {
+        Config cfg = createDummyConfig();
+
+        cfg.setConfiguration("myInt", 10);
+        cfg.getConfiguration("myInt", String.class);
+    }
+
+    @Test(expected = ConfigValueInvalidTypeException.class)
+    public void testConfigExceptionsGetStringAsNumber() throws IOException {
+        Config cfg = createDummyConfig();
+
+        cfg.setConfiguration("myString", "Hello World");
+        cfg.getConfiguration("myString", Integer.class);
+    }
+
+    @Test(expected = ConfigValueInvalidTypeException.class)
+    public void testConfigExceptionsGetNumberAsNumber() throws IOException {
+        Config cfg = createDummyConfig();
+
+        cfg.setConfiguration("myShort", (short) 10);
+        cfg.getConfiguration("myShort", Integer.class);
+    }
+
+    @Test(expected = ConfigValueInvalidTypeException.class)
+    public void testConfigExceptionsSetNumbers() throws IOException {
+        Config cfg = createDummyConfig();
+
+        cfg.setConfiguration("myInt", 10);
+        cfg.setConfiguration("myInt", (short) 2);
+    }
+
+    @Test(expected = ConfigValueInvalidTypeException.class)
+    public void testConfigExceptionsSetStringFirst() throws IOException{
+        Config cfg = createDummyConfig();
+
+        cfg.setConfiguration("myString", "Hello World");
+        cfg.setConfiguration("myString", 10);
+    }
+
+    @Test(expected = ConfigValueInvalidTypeException.class)
+    public void testConfigExceptionsSetNumberFirst() throws IOException{
+        Config cfg = createDummyConfig();
+
+        cfg.setConfiguration("myString", 10);
+        cfg.setConfiguration("myString", "Hello World");
     }
 
 }
