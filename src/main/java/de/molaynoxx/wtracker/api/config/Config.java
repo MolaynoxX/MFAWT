@@ -29,7 +29,8 @@ public class Config {
     public Config(File configFile) throws IOException {
         configPath = configFile.getAbsoluteFile();
         if(!configPath.getParentFile().exists()) {
-            if(!configPath.mkdirs()) throw new IOException("Unable to create configuration file directory: " + configPath.getParent());
+            System.out.println();
+            if(!configPath.getParentFile().mkdirs()) throw new IOException("Unable to create configuration file directory: " + configPath.getParent());
         }
         if(!configPath.exists()) {
             if(!configPath.createNewFile()) throw new IOException("Unable to create configuration file: " + configPath.getAbsolutePath());

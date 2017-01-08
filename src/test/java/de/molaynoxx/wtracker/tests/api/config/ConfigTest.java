@@ -37,13 +37,15 @@ public class ConfigTest {
 
     @Test
     public void testWholeConfigSerialization() throws IOException {
-        File cfgFile = new File("config.json");
+        File cfgFile = new File("newFolder/config.json");
         Config cfg = new Config(cfgFile);
 
-        cfg.setConfiguration("Integer", 1);
+        cfg.setConfiguration("Integer", -999);
         cfg.setConfiguration("Float", 1.5F);
         cfg.setConfiguration("Double", 3.14D);
         cfg.setConfiguration("Byte", (byte) 0xFF);
+        cfg.setConfiguration("RandomText", "Hello");
+        cfg.setConfiguration("Integer", 1);
         cfg.setConfiguration("RandomText", "Hello World");
 
         cfg.writeToDisk();
@@ -55,7 +57,14 @@ public class ConfigTest {
         assertThat(cfg.getConfiguration("Byte", Byte.class), is((byte) 0xFF));
         assertThat(cfg.getConfiguration("RandomText", String.class), is("Hello World"));
 
+        cfg.setConfiguration("RandomText", "Bye");
+        cfg.setConfiguration("Byte", (byte) 0xAE);
+
+        assertThat(cfg.getConfiguration("RandomText", String.class), is("Bye"));
+        assertThat(cfg.getConfiguration("Byte", Byte.class), is((byte) 0xAE));
+
         cfgFile.delete();
+        cfgFile.getParentFile().delete();
     }
 
     @Test
