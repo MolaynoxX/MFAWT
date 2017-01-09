@@ -16,7 +16,9 @@ public class UserProfile extends Storable {
     private ArrayList<PerformedWorkout> performedWorkouts = new ArrayList<>();
     private String name;
 
-    public UserProfile(String name) {}
+    public UserProfile(String name) {
+        this.name = name;
+    }
 
     public static StorablePathBuilder<UserProfile> getPathBuilder() {
         return spb;

@@ -64,6 +64,10 @@ public class StorableContainer<T extends Storable> {
      * Writes all the Storable instances to the disk using gson
      */
     public void writeToDisk() throws IOException {
+        File base = new File(config.getConfiguration("basePath", String.class), pathBuilder.getSubPath());
+        if(!base.exists()) {
+            if(!base.mkdirs()) throw new IOException("Could not create directory " + base.getAbsolutePath());
+        }
         for(T element : storage) {
             File f = getPathForElement(element);
             try (FileWriter fw = new FileWriter(f)) {
@@ -76,6 +80,7 @@ public class StorableContainer<T extends Storable> {
      * Loads all the Storable instances from the disk using gson
      */
     public void loadFromDisk() throws IOException {
+        storage.clear();
         File base = new File(config.getConfiguration("basePath", String.class), pathBuilder.getSubPath());
         for(File fileElement : base.listFiles()) {
             T element = GsonUtil.instance.gson.fromJson(Files.toString(fileElement, Charsets.UTF_8), type);

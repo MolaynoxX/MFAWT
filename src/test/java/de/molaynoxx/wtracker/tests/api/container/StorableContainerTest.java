@@ -12,10 +12,56 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class StorableContainerTest {
+
+    @Test
+    public void testStorableContainerSerializationSimple() throws IOException {
+        try {
+            Config cfg = createDummyConfig();
+            StorableContainer<Exercise> scExer = new StorableContainer<>(cfg, Exercise.getPathBuilder(), Exercise.class);
+            StorableContainer<Workout> scWork = new StorableContainer<>(cfg, Workout.getPathBuilder(), Workout.class);
+            StorableContainer<UserProfile> scUser = new StorableContainer<>(cfg, UserProfile.getPathBuilder(), UserProfile.class);
+
+            Exercise e = new Exercise("Dummy Exercise", Units.KILOGRAM);
+            scExer.getElements().add(e);
+
+            Workout w = new Workout("Dummy Workout");
+            scWork.getElements().add(w);
+
+            UserProfile u = new UserProfile("Dummy User");
+            scUser.getElements().add(u);
+
+            scExer.writeToDisk();
+            scWork.writeToDisk();
+            scUser.writeToDisk();
+
+            scExer.loadFromDisk();
+            scWork.loadFromDisk();
+            scUser.loadFromDisk();
+
+            assertThat(scExer.getElements().size(), is(1));
+            assertThat(scWork.getElements().size(), is(1));
+            assertThat(scUser.getElements().size(), is(1));
+
+            Exercise[] ex = new Exercise[1];
+            Workout[] wo = new Workout[1];
+            UserProfile[] up = new UserProfile[1];
+
+            scExer.getElements().toArray(ex);
+            scWork.getElements().toArray(wo);
+            scUser.getElements().toArray(up);
+
+            assertThat(ex[0].getName(), is("Dummy Exercise"));
+            assertThat(wo[0].getName(), is("Dummy Workout"));
+            assertThat(up[0].getName(), is("Dummy User"));
+        } finally {
+            cleanupTests();
+        }
+    }
 
     @Test
     public void testPathBuilders() {

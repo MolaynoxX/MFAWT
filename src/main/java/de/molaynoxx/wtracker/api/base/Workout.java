@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Workout extends Storable {
 
-    private static final StorablePathBuilder<Workout> spb = new StorablePathBuilder<>("Exercises/");
+    private static final StorablePathBuilder<Workout> spb = new StorablePathBuilder<>("Workouts/");
 
     private final ArrayList<ExerciseSet> exercises = new ArrayList<>();
     /**
