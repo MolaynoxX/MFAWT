@@ -166,4 +166,9 @@ public class ConfigTest {
         new Config(new File("src/test/resources/invconf4.json"));
     }
 
+    @Test(expected = JsonParseException.class)
+    public void testConfigInvalidClass() throws IOException {
+        new Config(new File("src/test/resources/invconf5.json"));
+    }
+
 }
