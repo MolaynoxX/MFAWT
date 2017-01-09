@@ -34,4 +34,25 @@ public class Unit {
         return abbreviation;
     }
 
+    /**
+     * Overridden hashcode() to avoid issues from deserialization into new identical instances
+     * @return hashcode() of the name of the unit
+     */
+    @Override
+    public int hashCode() {
+        return unitName.hashCode();
+    }
+
+    /**
+     * Overridden equals() to avoid issues from deserialization into new identical instances
+     * @return equals() of the name of the unit if obj is instanceof Unit
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Unit) {
+            return ((Unit) obj).unitName.equals(unitName);
+        }
+        return super.equals(obj);
+    }
+
 }

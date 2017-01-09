@@ -1,5 +1,7 @@
 package de.molaynoxx.wtracker.api.base;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.Date;
 
 /**
@@ -34,6 +36,33 @@ public class PerformedWorkout extends Workout {
      */
     public void setDatePerformed(Date datePerformed) {
         this.datePerformed = datePerformed;
+    }
+
+    /**
+     * Overridden hashCode() to avoid issues from deserialization into new identical instances
+     * @return hashCode() of the content of the PerformedWorkout
+     */
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(getName());
+        for(ExerciseSet e : getExercises()) {
+            hcb.append(e);
+        }
+        hcb.append(datePerformed);
+        return hcb.toHashCode();
+    }
+
+    /**
+     * Overridden equals() to avoid issues from deserialization into new identical instances
+     * @return equals() of the content of the PerformedWorkout if obj is instanceof PerformedWorkout
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof PerformedWorkout) {
+            return super.equals(obj) && datePerformed.equals(((PerformedWorkout) obj).datePerformed);
+        }
+        return super.equals(obj);
     }
 
 }

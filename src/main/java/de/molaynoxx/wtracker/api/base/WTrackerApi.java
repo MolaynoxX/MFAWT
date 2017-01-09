@@ -2,7 +2,6 @@ package de.molaynoxx.wtracker.api.base;
 
 import de.molaynoxx.wtracker.api.config.Config;
 import de.molaynoxx.wtracker.api.container.StorableContainer;
-import de.molaynoxx.wtracker.api.profile.UserProfile;
 
 import java.io.File;
 import java.io.IOException;

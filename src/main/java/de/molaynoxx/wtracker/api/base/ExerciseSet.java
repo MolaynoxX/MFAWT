@@ -1,5 +1,7 @@
 package de.molaynoxx.wtracker.api.base;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.ArrayList;
 
 /**
@@ -57,6 +59,40 @@ public class ExerciseSet {
      */
     public void setUnitData(double unitData) {
         this.unitData = unitData;
+    }
+
+    /**
+     * Overridden hashCode() to avoid issues from deserialization into new identical instances
+     * @return hashCode() of the content of the ExerciseSet
+     */
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(exercise);
+        hcb.append(unitData);
+        repetitions.forEach(hcb::append);
+        return hcb.toHashCode();
+    }
+
+    /**
+     * Overridden equals() to avoid issues from deserialization into new identical instances
+     * @return equals() of the content of the ExerciseSet if obj is instanceof ExerciseSet
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof ExerciseSet) {
+            ExerciseSet eObj = (ExerciseSet) obj;
+
+            if(unitData != eObj.unitData) return false;
+            if(!exercise.equals(eObj.exercise)) return false;
+            if(repetitions.size() != eObj.repetitions.size()) return false;
+
+            for(int i = 0; i < repetitions.size(); i++) {
+                if(!repetitions.get(i).equals(eObj.repetitions.get(i))) return false;
+            }
+            return true;
+        }
+        return super.equals(obj);
     }
 
 }

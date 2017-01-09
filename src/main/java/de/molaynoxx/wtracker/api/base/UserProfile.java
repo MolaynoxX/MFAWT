@@ -1,8 +1,8 @@
-package de.molaynoxx.wtracker.api.profile;
+package de.molaynoxx.wtracker.api.base;
 
-import de.molaynoxx.wtracker.api.base.PerformedWorkout;
 import de.molaynoxx.wtracker.api.storage.Storable;
 import de.molaynoxx.wtracker.api.storage.StorablePathBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
 
@@ -67,6 +67,41 @@ public class UserProfile extends Storable {
      */
     public void removePerformedWorkout(PerformedWorkout w) {
         performedWorkouts.remove(w);
+    }
+
+    /**
+     * Overridden hashCode() to avoid issues from deserialization into new identical instances
+     * @return hashCode() of the content of the UserProfile
+     */
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(name);
+        performedWorkouts.forEach(hcb::append);
+        return hcb.toHashCode();
+    }
+
+    /**
+     * Overridden equals() to avoid issues from deserialization into new identical instances
+     * @return equals() of the content of the UserProfile if obj is instanceof UserProfile
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof UserProfile) {
+            UserProfile uObj = (UserProfile) obj;
+
+            if(!name.equals(uObj.name)) return false;
+            if(performedWorkouts.size() != uObj.performedWorkouts.size()) return false;
+
+            for(PerformedWorkout pfw : performedWorkouts) {
+                if(!uObj.performedWorkouts.contains(pfw)) return false;
+            }
+            for(PerformedWorkout pfw : uObj.performedWorkouts) {
+                if(!performedWorkouts.contains(pfw)) return false;
+            }
+            return true;
+        }
+        return super.equals(obj);
     }
 
 }
