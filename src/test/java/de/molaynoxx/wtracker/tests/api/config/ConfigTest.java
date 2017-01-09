@@ -1,5 +1,7 @@
 package de.molaynoxx.wtracker.tests.api.config;
 
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import de.molaynoxx.wtracker.api.config.Config;
 import de.molaynoxx.wtracker.api.config.ConfigValue;
 import de.molaynoxx.wtracker.api.config.NumberConfigValue;
@@ -142,6 +144,26 @@ public class ConfigTest {
 
         cfg.setConfiguration("myString", 10);
         cfg.setConfiguration("myString", "Hello World");
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testConfigInvalidClassType() throws IOException {
+        new Config(new File("src/test/resources/invconf1.json"));
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testConfigInvalidNestedObject() throws IOException {
+        new Config(new File("src/test/resources/invconf2.json"));
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testConfigInvalidArray() throws IOException {
+        new Config(new File("src/test/resources/invconf3.json"));
+    }
+
+    @Test(expected = JsonSyntaxException.class)
+    public void testConfigInvalidJSON() throws IOException {
+        new Config(new File("src/test/resources/invconf4.json"));
     }
 
 }
