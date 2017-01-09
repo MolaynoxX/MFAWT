@@ -1,13 +1,16 @@
 package de.molaynoxx.wtracker.api.base;
 
 import de.molaynoxx.wtracker.api.storage.Storable;
+import de.molaynoxx.wtracker.api.storage.StorablePathBuilder;
 
 import java.util.ArrayList;
 
 /**
  * A workout can contain many different ExerciseSets
  */
-public class Workout implements Storable {
+public class Workout extends Storable {
+
+    private static final StorablePathBuilder<Workout> spb = new StorablePathBuilder<>("Exercises/");
 
     private final ArrayList<ExerciseSet> exercises = new ArrayList<>();
     /**
@@ -21,6 +24,10 @@ public class Workout implements Storable {
      */
     public Workout(String name) {
         this.name = name;
+    }
+
+    public static StorablePathBuilder getPathBuilder() {
+        return spb;
     }
 
     /**
@@ -45,11 +52,6 @@ public class Workout implements Storable {
      */
     public ArrayList<ExerciseSet> getExercises() {
         return exercises;
-    }
-
-    @Override
-    public String getSubPath() {
-        return "Workouts/";
     }
 
     @Override

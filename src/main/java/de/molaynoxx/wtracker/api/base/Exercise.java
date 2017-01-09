@@ -1,11 +1,14 @@
 package de.molaynoxx.wtracker.api.base;
 
 import de.molaynoxx.wtracker.api.storage.Storable;
+import de.molaynoxx.wtracker.api.storage.StorablePathBuilder;
 
 /**
  * Class describing an exercise (not any data concerning any actually performed exercise)
  */
-public class Exercise implements Storable {
+public class Exercise extends Storable {
+
+    private static final StorablePathBuilder<Exercise> spb = new StorablePathBuilder<>("Exercises/");
 
     /**
      * needs to be a valid filename (no invalid characters)
@@ -21,6 +24,10 @@ public class Exercise implements Storable {
     public Exercise(String name, Unit unit) {
         this.name = name;
         this.unit = unit;
+    }
+
+    public static StorablePathBuilder getPathBuilder() {
+        return spb;
     }
 
     /**
@@ -53,11 +60,6 @@ public class Exercise implements Storable {
      */
     public void setUnit(Unit unit) {
         this.unit = unit;
-    }
-
-    @Override
-    public String getSubPath() {
-        return "Exercises/";
     }
 
     @Override
