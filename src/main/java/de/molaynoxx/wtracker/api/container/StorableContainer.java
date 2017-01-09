@@ -1,13 +1,15 @@
 package de.molaynoxx.wtracker.api.container;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import de.molaynoxx.wtracker.api.config.Config;
 import de.molaynoxx.wtracker.api.storage.Storable;
 import de.molaynoxx.wtracker.api.storage.StorablePathBuilder;
+import de.molaynoxx.wtracker.api.util.GsonUtil;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,17 +19,19 @@ import java.util.Set;
  */
 public class StorableContainer<T extends Storable> {
 
-    private final HashSet<T> store = new HashSet<>();
+    private final HashSet<T> storage = new HashSet<>();
+    private final StorablePathBuilder<T> pathBuilder;
     private final Class<T> type;
     private final Config config;
 
     /**
      * Returns a new StorableContainer instance for the specified Class type
      * @param config Configuration for the WTracker API (used for things like basePath)
-     * @param type Class type of the stored elements
+     * @param pathBuilder Path builder for the stored elements
      */
-    public StorableContainer(Config config, Class<T> type) {
+    public StorableContainer(Config config, StorablePathBuilder<T> pathBuilder, Class<T> type) {
         this.config = config;
+        this.pathBuilder = pathBuilder;
         this.type = type;
     }
 
@@ -37,7 +41,7 @@ public class StorableContainer<T extends Storable> {
      * @return Set of the stored elements
      */
     public Set<T> getElements() {
-        return store;
+        return storage;
     }
 
     /**
@@ -45,36 +49,38 @@ public class StorableContainer<T extends Storable> {
      * @param element element to be removed
      */
     public void removeElement(T element) throws IOException {
-        store.remove(element);
+        storage.remove(element);
         File storedFile = getPathForElement(element);
         if(storedFile.exists()) {
             if(!storedFile.delete()) throw new IOException("Could not delete " + storedFile.getAbsolutePath());
         }
     }
 
-    @SuppressWarnings("unchecked")
     private File getPathForElement(T element) {
-        try {
-            Method m = type.getDeclaredMethod("getPathBuilder");
-            StorablePathBuilder<T> spb = (StorablePathBuilder<T>) m.invoke(null);
-            return spb.buildPath(config.getConfiguration("basePath", String.class), element);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("Could not get StorablePathBuilder for " + type.getName(), e);
-        }
+        return pathBuilder.buildPath(config.getConfiguration("basePath", String.class), element);
     }
 
     /**
-     * Writes all the Storable instance to the disk using gson
+     * Writes all the Storable instances to the disk using gson
      */
-    public void writeToDisk() {
-
+    public void writeToDisk() throws IOException {
+        for(T element : storage) {
+            File f = getPathForElement(element);
+            try (FileWriter fw = new FileWriter(f)) {
+                GsonUtil.instance.gson.toJson(element, fw);
+            }
+        }
     }
 
     /**
      * Loads all the Storable instances from the disk using gson
      */
-    public void loadFromDisk() {
-
+    public void loadFromDisk() throws IOException {
+        File base = new File(config.getConfiguration("basePath", String.class), pathBuilder.getSubPath());
+        for(File fileElement : base.listFiles()) {
+            T element = GsonUtil.instance.gson.fromJson(Files.toString(fileElement, Charsets.UTF_8), type);
+            storage.add(element);
+        }
     }
 
 }

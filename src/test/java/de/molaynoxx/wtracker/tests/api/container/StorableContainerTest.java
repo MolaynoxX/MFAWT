@@ -12,15 +12,25 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 public class StorableContainerTest {
+
+    @Test
+    public void testPathBuilders() {
+        assertThat(Exercise.getPathBuilder().getSubPath(), notNullValue());
+        assertThat(Workout.getPathBuilder().getSubPath(), notNullValue());
+        assertThat(UserProfile.getPathBuilder().getSubPath(), notNullValue());
+    }
 
     @Test
     public void testStorableContainerPathGeneration() throws IOException {
         try {
             Config cfg = createDummyConfig();
-            StorableContainer<Exercise> scExer = new StorableContainer<>(cfg, Exercise.class);
-            StorableContainer<Workout> scWork = new StorableContainer<>(cfg, Workout.class);
-            StorableContainer<UserProfile> scUser = new StorableContainer<>(cfg, UserProfile.class);
+            StorableContainer<Exercise> scExer = new StorableContainer<>(cfg, Exercise.getPathBuilder(), Exercise.class);
+            StorableContainer<Workout> scWork = new StorableContainer<>(cfg, Workout.getPathBuilder(), Workout.class);
+            StorableContainer<UserProfile> scUser = new StorableContainer<>(cfg, UserProfile.getPathBuilder(), UserProfile.class);
 
             Exercise e = new Exercise("Dummy Exercise", Units.KILOGRAM);
             scExer.getElements().add(e);

@@ -148,27 +148,27 @@ public class ConfigTest {
 
     @Test(expected = JsonParseException.class)
     public void testConfigInvalidClassType() throws IOException {
-        new Config(new File("src/test/resources/invconf1.json"));
+        new Config(new File("src/test/resources/invconf/invconf1.json"));
     }
 
     @Test(expected = JsonParseException.class)
     public void testConfigInvalidNestedObject() throws IOException {
-        new Config(new File("src/test/resources/invconf2.json"));
+        new Config(new File("src/test/resources/invconf/invconf2.json"));
     }
 
     @Test(expected = JsonParseException.class)
     public void testConfigInvalidArray() throws IOException {
-        new Config(new File("src/test/resources/invconf3.json"));
+        new Config(new File("src/test/resources/invconf/invconf3.json"));
     }
 
     @Test(expected = JsonSyntaxException.class)
     public void testConfigInvalidJSON() throws IOException {
-        new Config(new File("src/test/resources/invconf4.json"));
+        new Config(new File("src/test/resources/invconf/invconf4.json"));
     }
 
     @Test(expected = JsonParseException.class)
     public void testConfigInvalidClass() throws IOException {
-        new Config(new File("src/test/resources/invconf5.json"));
+        new Config(new File("src/test/resources/invconf/invconf5.json"));
     }
 
 }

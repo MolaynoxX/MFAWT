@@ -26,7 +26,7 @@ public class Workout extends Storable {
         this.name = name;
     }
 
-    public static StorablePathBuilder getPathBuilder() {
+    public static StorablePathBuilder<Workout> getPathBuilder() {
         return spb;
     }
 

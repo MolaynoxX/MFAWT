@@ -18,7 +18,7 @@ public class UserProfile extends Storable {
 
     public UserProfile(String name) {}
 
-    public static StorablePathBuilder getPathBuilder() {
+    public static StorablePathBuilder<UserProfile> getPathBuilder() {
         return spb;
     }
 
